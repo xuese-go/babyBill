@@ -3,23 +3,20 @@ package db
 import (
 	"github.com/boltdb/bolt"
 	"log"
-	"time"
 )
-
-var Db *bolt.DB
 
 func init() {
 	//打开我的数据库当前目录中的数据文件。
 	//如果它不存在，它将被创建。
 	//同时只能打开一次，所以防止无限等待则设置超时时间
-	Db, err := bolt.Open("babyBill.db", 0600, &bolt.Options{Timeout: 1 * time.Second})
+	db, err := bolt.Open("babyBill.db", 0600, &bolt.Options{Timeout: 1 * 5000})
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer Db.Close()
+	defer db.Close()
 
 	//	创建表
-	err = Db.Update(func(tx *bolt.Tx) error {
+	err = db.Update(func(tx *bolt.Tx) error {
 
 		//判断要创建的表是否存在
 		b := tx.Bucket([]byte("record_table"))
@@ -38,7 +35,7 @@ func init() {
 
 	//更新数据库失败
 	if err != nil {
-		log.Println(err)
+		log.Println(err.Error())
 	}
 
 	//	读写事务

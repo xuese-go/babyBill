@@ -48,7 +48,7 @@ func main() {
 						Value:    Bind("金额", Range{Min: 0.01, Max: 9999.99}),
 						Suffix:   " 元",
 						Decimals: 2,
-						MinValue: 0.01,
+						MinValue: 0.00,
 						MaxValue: 9999.99,
 						MinSize: Size{
 							Width: 200,
@@ -72,14 +72,12 @@ func main() {
 					PushButton{
 						Text: "确定",
 						OnClicked: func() {
-							var r service.Record
-							r.Dates = inDE.Date().Format("yyyy-MM-dd")
-							r.Money = strconv.FormatFloat(inNUM.Value(), 'E', -1, 64)
-							r.Matter = inTE.Text()
-							log.Panicln(r)
-							//if err := service.Save(r);err !=nil{
-							//	log.Panicln(err.Error())
-							//}
+							dates := inDE.Date().Format("2006-01-02 15:04:05")
+							money := strconv.FormatFloat(inNUM.Value(), 'E', 2, 64)
+							matter := inTE.Text()
+							if err := service.Save(dates, money, matter); err != nil {
+								log.Panicln(err.Error())
+							}
 						},
 					},
 				},
