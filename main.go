@@ -19,10 +19,12 @@ func main() {
 	var inDE *walk.DateEdit
 	var inNUM *walk.NumberEdit
 	var inTE *walk.LineEdit
+	var mw *walk.MainWindow
 
-	_, _ = MainWindow{
-		Title:   "宝宝简易记账",
-		MinSize: Size{600, 400},
+	if _, err := (MainWindow{
+		AssignTo: &mw,
+		Title:    "宝宝简易记账",
+		MinSize:  Size{600, 400},
 		Layout: VBox{
 			MarginsZero: true,
 			SpacingZero: true,
@@ -76,7 +78,13 @@ func main() {
 							money := strconv.FormatFloat(inNUM.Value(), 'E', 2, 64)
 							matter := inTE.Text()
 							if err := service.Save(dates, money, matter); err != nil {
-								log.Panicln(err.Error())
+								if _, err = dlg(mw, "失败"); err != nil {
+									log.Panicln(err.Error())
+								}
+							} else {
+								if _, err = dlg(mw, "成功"); err != nil {
+									log.Fatal(err.Error())
+								}
 							}
 						},
 					},
@@ -98,5 +106,50 @@ func main() {
 				},
 			},
 		},
-	}.Run()
+	}.Run()); err != nil {
+		log.Fatal(err)
+	}
+}
+
+/**
+弹窗
+*/
+func dlg(mw walk.Form, str string) (int, error) {
+	var d *walk.Dialog
+	var btn1, btn2 *walk.PushButton
+	return Dialog{
+		AssignTo:      &d,
+		DefaultButton: &btn1,
+		CancelButton:  &btn2,
+		MinSize:       Size{Width: 300, Height: 300},
+		Layout:        VBox{},
+		Children: []Widget{
+			Composite{
+				Layout: Grid{
+					Columns: 1,
+				},
+				Children: []Widget{
+					Label{
+						Text: str,
+					},
+				},
+			},
+			Composite{
+				Layout: HBox{},
+				Children: []Widget{
+					HSpacer{},
+					PushButton{
+						AssignTo:  &btn1,
+						Text:      "确定",
+						OnClicked: func() { d.Accept() },
+					},
+					PushButton{
+						AssignTo:  &btn2,
+						Text:      "取消",
+						OnClicked: func() { d.Cancel() },
+					},
+				},
+			},
+		},
+	}.Run(mw)
 }
