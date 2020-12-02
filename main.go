@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
+	_ "github.com/xuese-go/babyBill/db"
 	"github.com/xuese-go/babyBill/service"
 	"log"
 	"os"
@@ -15,22 +16,156 @@ func init() {
 	log.SetPrefix("[qSkipTool]")
 	log.SetFlags(log.LstdFlags | log.Lshortfile | log.LUTC)
 }
+
+var mw *walk.MainWindow
+var tv *walk.TableView
+var m = "0.00"
+var d = "0.00"
+
+/**
+表格相关
+*/
+type Foo struct {
+	Index int
+	A     string
+	B     string
+	C     string
+}
+
+type FooModel struct {
+	walk.TableModelBase
+	walk.SorterBase
+	sortColumn int
+	sortOrder  walk.SortOrder
+	items      []*Foo
+}
+
+func (m *FooModel) RowCount() int {
+	return len(m.items)
+}
+
+// 指定单元格显示的文本
+func (m *FooModel) Value(row, col int) interface{} {
+	item := m.items[row]
+
+	switch col {
+	case 0:
+		return item.Index
+
+	case 1:
+		return item.C
+
+	case 2:
+		return item.B
+
+	case 3:
+		return item.A
+	}
+
+	panic("unexpected col")
+}
+
+func NewFooModel(d []*service.Record) *FooModel {
+	m := new(FooModel)
+	m.items = make([]*Foo, 1)
+	//m.items[0] = &Foo{
+	//	Index: 0,
+	//	A:     "1",
+	//	B:     "2",
+	//	C:     "3",
+	//}
+	//for i := 0; i < 100; i++ {
+	//	m.items[i] = &Foo{
+	//		Index: i,
+	//		A:     "1",
+	//		B:     "2",
+	//		C:     "3",
+	//	}
+	//}
+	log.Panicln(m.items[0])
+	return m
+}
+
 func main() {
-	var inDE *walk.DateEdit
+	var inDE, inDE2 *walk.DateEdit
 	var inNUM *walk.NumberEdit
 	var inTE *walk.LineEdit
-	var mw *walk.MainWindow
+	//表格数据
+	model := NewFooModel(make([]*service.Record, 0))
 
 	if _, err := (MainWindow{
 		AssignTo: &mw,
 		Title:    "宝宝简易记账",
-		MinSize:  Size{600, 400},
+		MinSize:  Size{Width: 600, Height: 400},
 		Layout: VBox{
 			MarginsZero: true,
 			SpacingZero: true,
 			Spacing:     0,
 		},
 		Children: []Widget{
+			Composite{
+				Layout: Grid{
+					Columns: 7,
+				},
+				Children: []Widget{
+					DateEdit{
+						Date:     Bind("日期"),
+						AssignTo: &inDE2,
+					},
+					LinkLabel{
+						Text: "所选月统计金额：",
+					},
+					LinkLabel{
+						Text: m,
+					},
+					LinkLabel{
+						Text: "所选日统计金额：",
+					},
+					LinkLabel{
+						Text: d,
+					},
+					PushButton{
+						Text: "查询",
+						OnClicked: func() {
+							if data, err := service.Find(""); err != nil {
+								dlg("失败")
+								log.Panicln(err)
+							} else {
+								da := NewFooModel(data)
+								if err = tv.SetModel(da); err != nil {
+									dlg("table赋值失败")
+									log.Println(err)
+								}
+								model.PublishRowsReset()
+							}
+						},
+					},
+				},
+			},
+			VSplitter{
+				MinSize: Size{
+					Height: 390,
+				},
+				Children: []Widget{
+					TableView{
+						AssignTo: &tv,
+						Columns: []TableViewColumn{
+							{Title: "#", Alignment: AlignCenter, Width: 50},
+							{Title: "日期", Alignment: AlignCenter, Width: 150},
+							{Title: "金额", Alignment: AlignCenter, Width: 100},
+							{Title: "事项", Alignment: AlignFar},
+						},
+						StyleCell: func(style *walk.CellStyle) {
+							if style.Row()%2 == 0 {
+								style.BackgroundColor = walk.RGB(159, 215, 255)
+							} else {
+								style.BackgroundColor = walk.RGB(143, 199, 239)
+							}
+						},
+						Model: model,
+					},
+				},
+			},
 			Composite{
 				Layout: Grid{
 					Columns: 7,
@@ -72,52 +207,34 @@ func main() {
 						AssignTo: &inTE,
 					},
 					PushButton{
-						Text: "确定",
+						Text: "提交",
 						OnClicked: func() {
 							dates := inDE.Date().Format("2006-01-02 15:04:05")
 							money := strconv.FormatFloat(inNUM.Value(), 'E', 2, 64)
 							matter := inTE.Text()
 							if err := service.Save(dates, money, matter); err != nil {
-								if _, err = dlg(mw, "失败"); err != nil {
-									log.Panicln(err.Error())
-								}
+								dlg("失败")
+								log.Panicln(err)
 							} else {
-								if _, err = dlg(mw, "成功"); err != nil {
-									log.Fatal(err.Error())
-								}
+								dlg("成功")
 							}
-						},
-					},
-				},
-			},
-			VSplitter{
-				MinSize: Size{
-					Height: 390,
-				},
-				Children: []Widget{
-					TableView{
-						Columns: []TableViewColumn{
-							{Title: "#"},
-							{Title: "日期", Format: "2006-01-02 15:04:05", Width: 150},
-							{Title: "金额（元）", Alignment: AlignFar},
-							{Title: "事项", Alignment: AlignFar},
 						},
 					},
 				},
 			},
 		},
 	}.Run()); err != nil {
-		log.Fatal(err)
+		log.Println(err)
 	}
 }
 
 /**
 弹窗
 */
-func dlg(mw walk.Form, str string) (int, error) {
+func dlg(str string) {
 	var d *walk.Dialog
 	var btn1, btn2 *walk.PushButton
-	return Dialog{
+	_, err := Dialog{
 		AssignTo:      &d,
 		DefaultButton: &btn1,
 		CancelButton:  &btn2,
@@ -152,4 +269,7 @@ func dlg(mw walk.Form, str string) (int, error) {
 			},
 		},
 	}.Run(mw)
+	if err != nil {
+		log.Println(err)
+	}
 }
