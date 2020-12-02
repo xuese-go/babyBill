@@ -9,12 +9,12 @@ import (
 )
 
 type Record struct {
-	Dates  string `json:"dates"`
-	Money  string `json:"money"`
-	Matter string `json:"matter"`
+	Dates  time.Time `json:"dates"`
+	Money  float64   `json:"money"`
+	Matter string    `json:"matter"`
 }
 
-func Save(dates string, money string, matter string) error {
+func Save(dates time.Time, money float64, matter string) error {
 	db, err := bolt.Open("babyBill.db", 0600, &bolt.Options{Timeout: 1 * 5000})
 	if err != nil {
 		log.Fatal(err)
@@ -34,8 +34,8 @@ func Save(dates string, money string, matter string) error {
 			model.Money = money
 			model.Matter = matter
 			s, _ := json.Marshal(model)
-			var t int64 = time.Now().Unix()
-			var dateStr string = time.Unix(t, 0).Format("2006-01-02 15:04:05")
+			var t = time.Now().Unix()
+			var dateStr = time.Unix(t, 0).Format("2006-01-02 15:04:05.000")
 			err := b.Put([]byte(dateStr), s)
 			if err != nil {
 				log.Println(err.Error())

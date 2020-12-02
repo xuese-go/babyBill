@@ -7,7 +7,7 @@ import (
 	"github.com/xuese-go/babyBill/service"
 	"log"
 	"os"
-	"strconv"
+	"time"
 )
 
 func init() {
@@ -27,8 +27,8 @@ var d = "0.00"
 */
 type Foo struct {
 	Index int
-	A     string
-	B     string
+	A     time.Time
+	B     float64
 	C     string
 }
 
@@ -53,13 +53,13 @@ func (m *FooModel) Value(row, col int) interface{} {
 		return item.Index
 
 	case 1:
-		return item.C
+		return item.A
 
 	case 2:
 		return item.B
 
 	case 3:
-		return item.A
+		return item.C
 	}
 
 	panic("unexpected col")
@@ -67,22 +67,23 @@ func (m *FooModel) Value(row, col int) interface{} {
 
 func NewFooModel(d []*service.Record) *FooModel {
 	m := new(FooModel)
-	m.items = make([]*Foo, 1)
-	//m.items[0] = &Foo{
+	m.items = make([]*Foo, 0)
+	//f := &Foo{
 	//	Index: 0,
 	//	A:     "1",
 	//	B:     "2",
 	//	C:     "3",
 	//}
-	//for i := 0; i < 100; i++ {
-	//	m.items[i] = &Foo{
-	//		Index: i,
-	//		A:     "1",
-	//		B:     "2",
-	//		C:     "3",
-	//	}
-	//}
-	log.Panicln(m.items[0])
+	//m.items = append(m.items, f)
+	for i := range d {
+		f := &Foo{
+			Index: i,
+			A:     d[i].Dates,
+			B:     d[i].Money,
+			C:     d[i].Matter,
+		}
+		m.items = append(m.items, f)
+	}
 	return m
 }
 
@@ -151,8 +152,8 @@ func main() {
 						AssignTo: &tv,
 						Columns: []TableViewColumn{
 							{Title: "#", Alignment: AlignCenter, Width: 50},
-							{Title: "日期", Alignment: AlignCenter, Width: 150},
-							{Title: "金额", Alignment: AlignCenter, Width: 100},
+							{Title: "日期", Alignment: AlignCenter, Width: 150, Format: "2006-01-02"},
+							{Title: "金额(元)", Alignment: AlignCenter, Width: 100},
 							{Title: "事项", Alignment: AlignFar},
 						},
 						StyleCell: func(style *walk.CellStyle) {
@@ -209,8 +210,9 @@ func main() {
 					PushButton{
 						Text: "提交",
 						OnClicked: func() {
-							dates := inDE.Date().Format("2006-01-02 15:04:05")
-							money := strconv.FormatFloat(inNUM.Value(), 'E', 2, 64)
+							dates := inDE.Date()
+							//money := strconv.FormatFloat(inNUM.Value(), 'E', -1, 64)
+							money := inNUM.Value()
 							matter := inTE.Text()
 							if err := service.Save(dates, money, matter); err != nil {
 								dlg("失败")
