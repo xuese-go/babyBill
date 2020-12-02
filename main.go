@@ -30,6 +30,7 @@ type Foo struct {
 	A     time.Time
 	B     float64
 	C     string
+	D     int
 }
 
 type FooModel struct {
@@ -59,6 +60,9 @@ func (m *FooModel) Value(row, col int) interface{} {
 		return item.B
 
 	case 3:
+		return item.C
+
+	case 4:
 		return item.C
 	}
 
@@ -155,6 +159,7 @@ func main() {
 							{Title: "日期", Alignment: AlignCenter, Width: 150, Format: "2006-01-02"},
 							{Title: "金额(元)", Alignment: AlignCenter, Width: 100},
 							{Title: "事项", Alignment: AlignFar},
+							{Title: "操作", Alignment: AlignFar},
 						},
 						StyleCell: func(style *walk.CellStyle) {
 							if style.Row()%2 == 0 {
