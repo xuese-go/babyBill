@@ -53,13 +53,14 @@ func routers(r *gin.Engine) {
 	//api路由
 	apis := r.Group("/api")
 	{
-		//login
 		record := apis.Group("/record")
 		record.POST("/record", controller.Save)
 		record.DELETE("/record/:deleteId", controller.Delete)
 		record.PUT("/record/:putId", controller.Update)
 		record.GET("/record/:getId", controller.One)
 		record.GET("/records", controller.Page)
+		//统计
+		record.GET("/statistics", controller.Statistics)
 
 	}
 

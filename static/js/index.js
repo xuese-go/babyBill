@@ -6,9 +6,16 @@ Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
 });
+//日期框默认今日
+$("#startDate").val(toDayDate())
+$("#endDate").val(toDayDate())
+$("#dates").val(toDayDate())
+$("#dates2").val(toDayDate())
 $(function () {
     //分页
     page()
+    //今日统计
+    toDay()
     //查询
     $("#form-search").bind("click", function () {
         page()
@@ -26,6 +33,7 @@ $(function () {
                 $("#btn-to-save").click()
                 $('#form-save')[0].reset()
                 page()
+                toDay()
             } else {
                 alter2(3, e.msg)
             }
@@ -46,12 +54,17 @@ $(function () {
                 $("#btn-to-update").click()
                 $('#form-update')[0].reset()
                 page()
+                toDay()
             } else {
                 alter2(3, e.msg)
             }
         }).fail(function (err) {
 
         })
+    })
+//    点击统计
+    $("#click-statistics").on("click",function(ev){
+        clickStatistics()
     })
 })
 
@@ -118,6 +131,7 @@ function del(o) {
             }).done(function (e) {
                 if (e.success) {
                     page()
+                    toDay()
                 } else {
                     alter2(4, e.msg)
                 }
@@ -144,6 +158,54 @@ function one(e) {
         }
     }).fail(function (err) {
 
+    })
+}
+
+//今日统计
+function toDay() {
+    $.ajax("/api/record/statistics", {
+        type: "GET",
+        dataType: 'json',
+        data: {
+            "dates1": toDayDate()
+        }
+    }).done(function (e) {
+        if (e.success) {
+            let m = e.data[0].money
+            $("#to-day-statistics").text(m)
+        } else {
+            alter2(3, e.msg)
+        }
+    })
+}
+
+//今日日期
+function toDayDate() {
+    const myDate = new Date();
+    let year = myDate.getFullYear();
+    let month = myDate.getMonth() + 1;
+    let day = myDate.getDate();
+    return year + "-" + month + "-" + (day < 10 ? "0" + day : day)
+}
+
+//点击统计
+function clickStatistics(){
+    let sd = $("#startDate").val()
+    let ed = $("#endDate").val()
+    $.ajax("/api/record/statistics", {
+        type: "GET",
+        dataType: 'json',
+        data: {
+            "dates1": sd,
+            "dates2": ed
+        }
+    }).done(function (e) {
+        if (e.success) {
+            let m = e.data[0].money
+            $("#statistics-click").text(m)
+        } else {
+            alter2(3, e.msg)
+        }
     })
 }
 

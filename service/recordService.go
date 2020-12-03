@@ -110,7 +110,7 @@ func Page(pageNum int, pageSize int, record structs.Record) structs.ResponeStruc
 
 	//分页信息
 	if pageNum > 0 && pageSize > 0 {
-		dba = dba.Order("dates")
+		dba = dba.Order("dates desc")
 		dba = dba.Offset((pageNum - 1) * pageSize).Limit(pageSize)
 	}
 	//查询
@@ -124,31 +124,35 @@ func Page(pageNum int, pageSize int, record structs.Record) structs.ResponeStruc
 /**
 统计查询
 */
-func Statistics(dates string) structs.ResponeStruct {
-	if dates == "" {
+func Statistics(dates1 string, dates2 string) structs.ResponeStruct {
+	if dates1 == "" {
 		return structs.ResponeStruct{Success: false, Msg: "参数不能为空"}
 	}
-	resp := statistics2(dates)
+	resp := statistics2(dates1, dates2)
 	if resp.Success {
 		//	迭代并进行相关统计操作
 	}
 	return resp
 }
-func statistics2(dates string) structs.ResponeStruct {
-	if dates == "" {
+func statistics2(dates1 string, dates2 string) structs.ResponeStruct {
+	if dates1 == "" {
 		return structs.ResponeStruct{Success: false, Msg: "参数不能为空"}
 	}
 	//为了不影响后边的操作  所以需要使用新的变量
 	dba := db.Db
-	us := make([]float64, 0)
+	us := make([]structs.Record, 0)
 
 	//查询条件
-	if dates != "" {
-		dba = dba.Where("dates like ?", "%"+dates+"%")
+	if dates2 != "" {
+		//两个日期都有则查询指定范围的
+		dba = dba.Where("dates >= ? and dates <= ?", dates1, dates2)
+	} else {
+		//查询指定日期的
+		dba = dba.Where("dates = ?", dates1)
 	}
 
 	//查询
-	if err := dba.Table("record_table").Select([]string{"money"}).Scan(&us).Error; err != nil {
+	if err := dba.Table("record_table").Select([]string{"sum(money) as money"}).Scan(&us).Error; err != nil {
 		log.Println(err.Error())
 		return structs.ResponeStruct{Success: false, Msg: "操作失败"}
 	}

@@ -78,9 +78,10 @@ func Page(ctx *gin.Context) {
 统计 根据传的时间参数 sql灵活统计  date >= d and date <= d
 */
 func Statistics(ctx *gin.Context) {
-	dates := ctx.Query("dates")
-	if dates != "" {
-		res := service.Statistics(dates)
+	dates1 := ctx.Query("dates1")
+	dates2 := ctx.Query("dates2")
+	if dates1 != "" {
+		res := service.Statistics(dates1, dates2)
 		structs.Respone(ctx, res)
 	} else {
 		structs.Respone(ctx, structs.ResponeStruct{Success: false, Msg: "需要输入时间"})

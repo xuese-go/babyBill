@@ -36,7 +36,7 @@ func PageUtil(count int, pageSize int, pageNum int) map[string]interface{} {
 		p := pageMap["pageNum"]
 		p2 := pageMap["pages"]
 		//当前页码标签前后各显示多少页码标签
-		size := 2
+		size := 10
 		d := make([]int, 0)
 		if p.(int) <= 0 {
 			return d
