@@ -155,10 +155,12 @@ func main() {
 				},
 				Children: []Widget{
 					TableView{
-						AssignTo:   &tv,
-						CheckBoxes: true,
+						AssignTo:         &tv,
+						AlternatingRowBG: true,
+						CheckBoxes:       true,
+						MultiSelection:   true,
 						Columns: []TableViewColumn{
-							{Title: "#", Alignment: AlignCenter, Width: 50},
+							{Title: "#", Alignment: AlignCenter},
 							{Title: "日期", Alignment: AlignCenter, Width: 150, Format: "2006-01-02"},
 							{Title: "金额(元)", Alignment: AlignCenter, Width: 100},
 							{Title: "事项", Alignment: AlignFar},
@@ -166,21 +168,17 @@ func main() {
 						},
 						StyleCell: func(style *walk.CellStyle) {
 							//item := model.items[style.Row()]
-							//log.Panicln(item)
 							//if item.checked {
-							//	if style.Row()%2 == 0 {
-							//		style.BackgroundColor = walk.RGB(159, 215, 255)
-							//	} else {
-							//		style.BackgroundColor = walk.RGB(143, 199, 239)
-							//	}
-							//}
-							//if style.Row()%2 == 0 {
-							//	style.BackgroundColor = walk.RGB(159, 215, 255)
-							//} else {
 							//	style.BackgroundColor = walk.RGB(143, 199, 239)
+							//}
+
+							//switch style.Col() {
+							//case 0:
 							//}
 						},
 						Model: model,
+						OnSelectedIndexesChanged: func() {
+						},
 						OnMouseDown: func(x, y int, button walk.MouseButton) {
 
 						},
