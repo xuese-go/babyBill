@@ -12,6 +12,7 @@ type Record struct {
 	Dates  time.Time `json:"dates"`
 	Money  float64   `json:"money"`
 	Matter string    `json:"matter"`
+	Key    string    `json:"key"`
 }
 
 func Save(dates time.Time, money float64, matter string) error {
@@ -79,6 +80,7 @@ func Find(dates string) ([]*Record, error) {
 				if err := json.Unmarshal(b, &m); err != nil {
 					log.Println(err)
 				} else {
+					m.Key = string(k)
 					data = append(data, m)
 				}
 			}

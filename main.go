@@ -26,11 +26,12 @@ var d = "0.00"
 表格相关
 */
 type Foo struct {
-	Index int
-	A     time.Time
-	B     float64
-	C     string
-	D     int
+	Index   int
+	A       time.Time
+	B       float64
+	C       string
+	D       string
+	checked bool
 }
 
 type FooModel struct {
@@ -63,7 +64,7 @@ func (m *FooModel) Value(row, col int) interface{} {
 		return item.C
 
 	case 4:
-		return item.C
+		return item.D
 	}
 
 	panic("unexpected col")
@@ -85,6 +86,7 @@ func NewFooModel(d []*service.Record) *FooModel {
 			A:     d[i].Dates,
 			B:     d[i].Money,
 			C:     d[i].Matter,
+			D:     d[i].Key,
 		}
 		m.items = append(m.items, f)
 	}
@@ -153,22 +155,35 @@ func main() {
 				},
 				Children: []Widget{
 					TableView{
-						AssignTo: &tv,
+						AssignTo:   &tv,
+						CheckBoxes: true,
 						Columns: []TableViewColumn{
 							{Title: "#", Alignment: AlignCenter, Width: 50},
 							{Title: "日期", Alignment: AlignCenter, Width: 150, Format: "2006-01-02"},
 							{Title: "金额(元)", Alignment: AlignCenter, Width: 100},
 							{Title: "事项", Alignment: AlignFar},
-							{Title: "操作", Alignment: AlignFar},
+							{Title: "key", Alignment: AlignCenter},
 						},
 						StyleCell: func(style *walk.CellStyle) {
-							if style.Row()%2 == 0 {
-								style.BackgroundColor = walk.RGB(159, 215, 255)
-							} else {
-								style.BackgroundColor = walk.RGB(143, 199, 239)
-							}
+							//item := model.items[style.Row()]
+							//log.Panicln(item)
+							//if item.checked {
+							//	if style.Row()%2 == 0 {
+							//		style.BackgroundColor = walk.RGB(159, 215, 255)
+							//	} else {
+							//		style.BackgroundColor = walk.RGB(143, 199, 239)
+							//	}
+							//}
+							//if style.Row()%2 == 0 {
+							//	style.BackgroundColor = walk.RGB(159, 215, 255)
+							//} else {
+							//	style.BackgroundColor = walk.RGB(143, 199, 239)
+							//}
 						},
 						Model: model,
+						OnMouseDown: func(x, y int, button walk.MouseButton) {
+
+						},
 					},
 				},
 			},
