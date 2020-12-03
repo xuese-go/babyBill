@@ -1,0 +1,225 @@
+{{define "index/index.html"}}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>宝宝简易记账</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="/static/js/fontawesome-free/css/all.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+        <!-- Theme style -->
+        <link rel="stylesheet" href="/static/css/adminlte.min.css">
+        <!-- Google Font: Source Sans Pro -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+        <!-- SweetAlert2 -->
+        <link rel="stylesheet" href="/static/js/sweetalert2-theme-bootstrap-4/bootstrap-4.min.css">
+    </head>
+    <body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+        <!-- Main content -->
+        <div class="content">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">宝宝简易记账</h3>
+                    <div class="card-tools">
+                        <div style="float: left">
+                            <button type="button"
+                                    class="btn btn-success btn-xs"
+                                    style="height: 31px"
+                                    data-toggle="modal"
+                                    data-target="#modal-save"
+                                    id="btn-to-save"
+                            >新增
+                            </button>
+                        </div>
+                        <div style="float: left">
+                            <div class="input-group input-group-sm" style="width: 150px;margin-top:0">
+                                <input type="text" id="table_search" class="form-control float-right"
+                                       placeholder="Search">
+                                <div class="input-group-append">
+                                    <button type="button" class="btn btn-default" id="form-search">
+                                        <i class="fas fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width: 10px">#</th>
+                            <th>日期</th>
+                            <th>金额</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table-content">
+                        <tr>
+                            <td>1</td>
+                            <td>lkfjldjpoawhpfmhpliadsfljoo</td>
+                            <td><span class="badge bg-danger">管理员</span><span class="badge bg-primary">普通</span></td>
+                            <td><span class="badge bg-success">正常</span><span class="badge bg-secondary">停用</span></td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-xs">删除</button>
+                                <button type="button" class="btn btn-warning btn-xs">修改/查看</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+                <div class="card-footer clearfix">
+                    <ul class="pagination pagination-sm m-0 float-right" id="table-page">
+                        <li class="page-item"><a class="page-link" href="#"></a></li>
+                    </ul>
+                </div>
+                <!-- /.card-footer-->
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal-save">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">新增</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" id="form-save">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="dates">日期</label>
+                                    <input type="date"
+                                           name="dates"
+                                           class="form-control"
+                                           id="dates"
+                                           required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="money">金额</label>
+                                    <input type="number"
+                                           name="money"
+                                           class="form-control"
+                                           id="money"
+                                           required
+                                           min="0.01"
+                                           max="99999.99"
+                                           step="0.01"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="remarks">备注</label>
+                                    <input type="text"
+                                           name="remarks"
+                                           class="form-control"
+                                           id="remarks"
+                                           required
+                                           minlength="1"
+                                           maxlength="50"
+                                    >
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-block btn-primary">确定</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <div class="modal fade" id="modal-update">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">修改</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form role="form" id="form-update">
+                            <div class="card-body">
+                                <input type="hidden" name="uuid" id="uuid2">
+                                <div class="form-group">
+                                    <label for="dates2">日期</label>
+                                    <input type="date"
+                                           name="dates"
+                                           class="form-control"
+                                           id="dates2"
+                                           required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="money2">金额</label>
+                                    <input type="number"
+                                           name="money"
+                                           class="form-control"
+                                           id="money2"
+                                           required
+                                           min="0.01"
+                                           max="99999.99"
+                                           step="0.01"
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="remarks2">备注</label>
+                                    <input type="text"
+                                           name="remarks"
+                                           class="form-control"
+                                           id="remarks2"
+                                           required
+                                           minlength="1"
+                                           maxlength="50">
+                                </div>
+                            </div>
+                            <!-- /.card-body -->
+
+                            <div class="card-footer">
+                                <button type="submit" class="btn btn-block btn-primary">确定</button>
+                                <button type="button"
+                                        style="display: none"
+                                        data-toggle="modal"
+                                        data-target="#modal-update"
+                                        id="btn-to-update"
+                                >新增
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+    </div>
+    <!-- ./wrapper -->
+
+    <!-- jQuery -->
+    <script src="/static/js/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/static/js/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/static/js/adminlte.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="/static/js/sweetalert2/sweetalert2.min.js"></script>
+    <!-- js -->
+    <script src="/static/js/index.js"></script>
+    </body>
+    </html>
+{{end}}

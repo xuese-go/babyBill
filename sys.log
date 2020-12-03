@@ -1,0 +1,15 @@
+[GIN-debug] Loaded HTML Templates (3): 
+	- index.html
+	- index/index.html
+	- 
+
+[GIN-debug] GET    /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] HEAD   /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
+[GIN-debug] GET    /                         --> main.routers.func1 (3 handlers)
+[GIN-debug] POST   /api/record/record        --> github.com/xuese-go/babyBill/controller.Save (3 handlers)
+[GIN-debug] DELETE /api/record/record/:deleteId --> github.com/xuese-go/babyBill/controller.Delete (3 handlers)
+[GIN-debug] PUT    /api/record/record/:putId --> github.com/xuese-go/babyBill/controller.Update (3 handlers)
+[GIN-debug] GET    /api/record/record/:getId --> github.com/xuese-go/babyBill/controller.One (3 handlers)
+[GIN-debug] GET    /api/record/records       --> github.com/xuese-go/babyBill/controller.Page (3 handlers)
+[GIN-debug] Environment variable PORT is undefined. Using port :8080 by default
+[GIN-debug] Listening and serving HTTP on :8080

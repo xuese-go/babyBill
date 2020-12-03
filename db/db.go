@@ -1,70 +1,30 @@
 package db
 
 import (
-	"github.com/boltdb/bolt"
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/xuese-go/babyBill/structs"
 	"log"
 )
 
+var Db *gorm.DB
+
 func init() {
-	//打开我的数据库当前目录中的数据文件。
-	//如果它不存在，它将被创建。
-	//同时只能打开一次，所以防止无限等待则设置超时时间
-	db, err := bolt.Open("babyBill.db", 0600, &bolt.Options{Timeout: 1 * 5000})
-	if err != nil {
-		log.Fatal(err)
-	}
-	defer db.Close()
-
-	//	创建表
-	err = db.Update(func(tx *bolt.Tx) error {
-
-		//判断要创建的表是否存在
-		b := tx.Bucket([]byte("record_table"))
-		if b == nil {
-
-			//创建叫"record_table"的表
-			_, err := tx.CreateBucket([]byte("record_table"))
-			if err != nil {
-				log.Println("表record_table创建失败", err.Error())
-			}
-		}
-
-		//一定要返回nil
-		return nil
-	})
-
-	//更新数据库失败
-	if err != nil {
+	var err error
+	dsn := "root:root@tcp(127.0.0.1:3306)/babyBill?charset=utf8&parseTime=true&loc=Local"
+	if Db, err = gorm.Open("mysql", dsn); err != nil {
+		log.Println("数据库连接失败")
 		log.Println(err.Error())
+	} else {
+		log.Println("数据库连接成功")
+		//打印sql
+		Db.LogMode(true)
+		//创建表
+		tables := make([]interface{}, 0)
+		tables = append(tables, &structs.Record{})
+
+		for k := range tables {
+			Db.Set("gorm:table_options", "ENGINE=InnoDB").AutoMigrate(tables[k])
+		}
 	}
-
-	//	读写事务
-	//	err := db.Update(func(tx *bolt.Tx) error {
-	//		...
-	//		return nil
-	//	})
-	//只读事务
-	//	err := db.View(func(tx *bolt.Tx) error {
-	//		...
-	//		return nil
-	//	})
-
-	//	手动事务
-	// Start a writable transaction.
-	//tx, err := db.Begin(true)
-	//if err != nil {
-	//	return err
-	//}
-	//defer tx.Rollback()
-	//
-	//// Use the transaction...
-	//_, err := tx.CreateBucket([]byte("MyBucket"))
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//// Commit the transaction and check for error.
-	//if err := tx.Commit(); err != nil {
-	//	return err
-	//}
 }
