@@ -33,7 +33,7 @@ func init() {
 	routers(r)
 
 	// 启动并监听默认8080端口
-	_ = r.Run()
+	_ = r.Run(":9999")
 
 }
 
