@@ -1,7 +1,7 @@
 [GIN-debug] Loaded HTML Templates (3): 
-	- 
 	- index.html
 	- index/index.html
+	- 
 
 [GIN-debug] GET    /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)
 [GIN-debug] HEAD   /static/*filepath         --> github.com/gin-gonic/gin.(*RouterGroup).createStaticHandler.func1 (3 handlers)

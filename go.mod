@@ -3,6 +3,7 @@ module github.com/xuese-go/babyBill
 go 1.15
 
 require (
+	github.com/CodyGuo/win v0.0.0-20170113125346-08e6b7208274
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.4.1 // indirect
 	github.com/golang/protobuf v1.4.3 // indirect

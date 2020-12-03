@@ -9,6 +9,15 @@ import (
 	"os"
 )
 
+var (
+	winExecError = map[uint32]string{
+		0:  "The system is out of memory or resources.",
+		2:  "The .exe file is invalid.",
+		3:  "The specified file was not found.",
+		11: "The specified path was not found.",
+	}
+)
+
 func init() {
 	// 加载默认配置
 	r := gin.Default()
