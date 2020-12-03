@@ -23,65 +23,174 @@
     <div class="wrapper">
         <!-- Main content -->
         <div class="content">
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="card-title">宝宝简易记账</h3>
-                    <div class="card-tools">
-                        <div style="float: left">
-                            <button type="button"
-                                    class="btn btn-success btn-xs"
-                                    style="height: 31px"
-                                    data-toggle="modal"
-                                    data-target="#modal-save"
-                                    id="btn-to-save"
-                            >新增
-                            </button>
+            <div class="row" style="margin: 0">
+                <div class="col-2">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">简单统计</h3>
+                            <div class="card-tools"></div>
                         </div>
-                        <div style="float: left">
-                            <div class="input-group input-group-sm" style="width: 150px;margin-top:0">
-                                <input type="text" id="table_search" class="form-control float-right"
-                                       placeholder="Search">
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-default" id="form-search">
-                                        <i class="fas fa-search"></i>
-                                    </button>
+                        <div class="card-body p-0">
+                            <ul class="nav nav-pills flex-column">
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 今日统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 1月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 2月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 3月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 4月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 5月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 6月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 7月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 8月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 9月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 10月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 11月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 12月统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 今年统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="#" class="nav-link">
+                                        <i class="fas fa-inbox"></i> 去年统计
+                                        <span class="badge bg-primary float-right">0</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                </div>
+                <div class="card col-10">
+                    <div class="card-header">
+                        <h3 class="card-title">
+                            宝宝简易记账
+                        </h3>
+                        <div class="card-tools">
+                            <div style="float: left">
+                                <button type="button"
+                                        class="btn btn-success btn-xs"
+                                        style="height: 31px"
+                                        data-toggle="modal"
+                                        data-target="#modal-save"
+                                        id="btn-to-save"
+                                >新增
+                                </button>
+                            </div>
+                            <div style="float: left">
+                                <div class="input-group input-group-sm" style="width: 150px;margin-top:0">
+                                    <input type="text" id="table_search" class="form-control float-right"
+                                           placeholder="根据日期">
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-default" id="form-search">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th style="width: 10px">#</th>
+                                <th>日期</th>
+                                <th>金额</th>
+                                <th>备注</th>
+                                <th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="table-content">
+                            <tr>
+                                <td>1</td>
+                                <td>lkfjldjpoawhpfmhpliadsfljoo</td>
+                                <td><span class="badge bg-danger">管理员</span><span class="badge bg-primary">普通</span>
+                                </td>
+                                <td><span class="badge bg-success">正常</span><span class="badge bg-secondary">停用</span>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-xs">删除</button>
+                                    <button type="button" class="btn btn-warning btn-xs">修改/查看</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                    <div class="card-footer clearfix">
+                        <ul class="pagination pagination-sm m-0 float-right" id="table-page">
+                            <li class="page-item"><a class="page-link" href="#"></a></li>
+                        </ul>
+                    </div>
+                    <!-- /.card-footer-->
                 </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th style="width: 10px">#</th>
-                            <th>日期</th>
-                            <th>金额</th>
-                            <th>备注</th>
-                            <th>操作</th>
-                        </tr>
-                        </thead>
-                        <tbody id="table-content">
-                        <tr>
-                            <td>1</td>
-                            <td>lkfjldjpoawhpfmhpliadsfljoo</td>
-                            <td><span class="badge bg-danger">管理员</span><span class="badge bg-primary">普通</span></td>
-                            <td><span class="badge bg-success">正常</span><span class="badge bg-secondary">停用</span></td>
-                            <td>
-                                <button type="button" class="btn btn-danger btn-xs">删除</button>
-                                <button type="button" class="btn btn-warning btn-xs">修改/查看</button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- /.card-body -->
-                <div class="card-footer clearfix">
-                    <ul class="pagination pagination-sm m-0 float-right" id="table-page">
-                        <li class="page-item"><a class="page-link" href="#"></a></li>
-                    </ul>
-                </div>
-                <!-- /.card-footer-->
             </div>
         </div>
 

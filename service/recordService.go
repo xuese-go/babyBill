@@ -120,3 +120,37 @@ func Page(pageNum int, pageSize int, record structs.Record) structs.ResponeStruc
 	}
 	return structs.ResponeStruct{Success: true, Data: us, Page: util.PageUtil(count, pageSize, pageNum)}
 }
+
+/**
+统计查询
+*/
+func Statistics(dates string) structs.ResponeStruct {
+	if dates == "" {
+		return structs.ResponeStruct{Success: false, Msg: "参数不能为空"}
+	}
+	resp := statistics2(dates)
+	if resp.Success {
+		//	迭代并进行相关统计操作
+	}
+	return resp
+}
+func statistics2(dates string) structs.ResponeStruct {
+	if dates == "" {
+		return structs.ResponeStruct{Success: false, Msg: "参数不能为空"}
+	}
+	//为了不影响后边的操作  所以需要使用新的变量
+	dba := db.Db
+	us := make([]float64, 0)
+
+	//查询条件
+	if dates != "" {
+		dba = dba.Where("dates like ?", "%"+dates+"%")
+	}
+
+	//查询
+	if err := dba.Table("record_table").Select([]string{"money"}).Scan(&us).Error; err != nil {
+		log.Println(err.Error())
+		return structs.ResponeStruct{Success: false, Msg: "操作失败"}
+	}
+	return structs.ResponeStruct{Success: true, Data: us}
+}
