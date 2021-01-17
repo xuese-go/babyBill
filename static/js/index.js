@@ -1,21 +1,18 @@
 let Toast;
 let pageNum = 1;
-const pageSize = 8;
+const pageSize = 10;
 //弹窗全局设置
 Toast = Swal.mixin({
     toast: true,
     position: 'top-end',
 });
-//日期框默认今日
-$("#startDate").val(toDayDate())
-$("#endDate").val(toDayDate())
-$("#dates").val(toDayDate())
-$("#dates2").val(toDayDate())
 $(function () {
     //分页
     page()
     //今日统计
     toDay()
+    //日期框默认今日
+    setDay()
     //查询
     $("#form-search").bind("click", function () {
         page()
@@ -34,6 +31,7 @@ $(function () {
                 $('#form-save')[0].reset()
                 page()
                 toDay()
+                setDay()
             } else {
                 alter2(3, e.msg)
             }
@@ -55,6 +53,7 @@ $(function () {
                 $('#form-update')[0].reset()
                 page()
                 toDay()
+                setDay()
             } else {
                 alter2(3, e.msg)
             }
@@ -63,7 +62,7 @@ $(function () {
         })
     })
 //    点击统计
-    $("#click-statistics").on("click",function(ev){
+    $("#click-statistics").on("click", function (ev) {
         clickStatistics()
     })
 })
@@ -132,6 +131,7 @@ function del(o) {
                 if (e.success) {
                     page()
                     toDay()
+                    setDay()
                 } else {
                     alter2(4, e.msg)
                 }
@@ -179,17 +179,33 @@ function toDay() {
     })
 }
 
+function setDay() {
+    $("#startDate").val(toDayDate())
+    $("#endDate").val(toDayDate())
+    $("#dates").val(toDayDate())
+    $("#dates2").val(toDayDate())
+}
+
 //今日日期
 function toDayDate() {
-    const myDate = new Date();
-    let year = myDate.getFullYear();
-    let month = myDate.getMonth() + 1;
-    let day = myDate.getDate();
-    return year + "-" + month + "-" + (day < 10 ? "0" + day : day)
+    // const myDate = new Date();
+    // let year = myDate.getFullYear();
+    // let month = myDate.getMonth() + 1;
+    // let day = myDate.getDate();
+    // return year + "-" + month + "-" + (day < 10 ? "0" + day : day)
+    // 给input  date设置默认值
+    const now = new Date();
+//格式化日，如果小于9，前面补0
+    let day = ("0" + now.getDate()).slice(-2);
+//格式化月，如果小于9，前面补0
+    let month = ("0" + (now.getMonth() + 1)).slice(-2);
+//拼装完整日期格式
+    let today = now.getFullYear() + "-" + (month) + "-" + (day);
+    return today
 }
 
 //点击统计
-function clickStatistics(){
+function clickStatistics() {
     let sd = $("#startDate").val()
     let ed = $("#endDate").val()
     $.ajax("/api/record/statistics", {
